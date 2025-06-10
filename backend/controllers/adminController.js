@@ -16,7 +16,10 @@ export const loginAdmin = async (req, res) => {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);
       res.json({ success: true, token });
     } else {
-      return res.json({ success: false, message: "invalid credentials" });
+      return res.json({
+        success: false,
+        message: "plz enter correct credentials",
+      });
     }
   } catch (err) {
     console.error(err);
