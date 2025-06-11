@@ -100,7 +100,7 @@ const AddDoctor = () => {
                 <option value="10 Year">10 Year</option>
               </select>
             </div>
-            <div className="flex-1 flex flex-col gap-1">
+            <div className="flex-1 flex flex-col gap-2">
               <p>Fees</p>
               <input
                 onChange={(e) => setFees(e.target.value)}
@@ -183,3 +183,9 @@ const AddDoctor = () => {
 };
 
 export default AddDoctor;
+
+// This code defines a React component for adding a doctor in an admin panel.
+// It includes a form with fields for the doctor's image, name, email, password, experience, fees, speciality, education, address, and an about section.
+// The component uses state hooks to manage the form data and a context to access backend URL and authentication token.
+// The form submission is handled by the `onSubmitHandler` function, which currently does not perform any actions.
+// The component is styled with Tailwind CSS classes for a clean and responsive design.
