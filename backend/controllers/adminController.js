@@ -1,4 +1,3 @@
-// adminController.js
 import validator from "validator";
 import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
@@ -27,6 +26,7 @@ export const loginAdmin = async (req, res) => {
   }
 };
 
+// API to add doctor
 export const addDoctor = async (req, res) => {
   try {
     const {
@@ -38,61 +38,72 @@ export const addDoctor = async (req, res) => {
       experience,
       about,
       fees,
-      address,
     } = req.body;
 
+    const address = {
+      line1: req.body["address[line1]"],
+      line2: req.body["address[line2]"],
+    };
+
+    const speciality = specialization; // Matching schema field name
     const imageFile = req.file;
-    //checking for all data to add doctor
+
+    // Check for required fields
     if (
       !name ||
       !email ||
       !password ||
-      !specialization ||
+      !speciality ||
       !degree ||
       !experience ||
       !about ||
       !fees ||
-      !address
+      !address.line1 ||
+      !address.line2 ||
+      !imageFile
     ) {
-      return res.json({ success: false, message: "missing details " });
+      return res.json({ success: false, message: "missing details" });
     }
-    // validating email formate
-    if (validator.isEmail(email) === false) {
+
+    // Validate email
+    if (!validator.isEmail(email)) {
       return res.json({ success: false, message: "invalid email" });
     }
-    // validating password formate
+
+    // Validate password
     if (password.length < 8) {
       return res.json({
         success: false,
         message: "password should be at least 8 characters and strong",
       });
     }
-    //hashing doctor password
+
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    //here 10 round means ?
-    // 10 rounds means the hashing algorithm will perform 2^10 (or 1024) iterations of the hashing function, making it more computationally expensive and time-consuming to crack the password.
 
-    // uploading image to cloudinary
-    const imageUplaod = await cloudinary.uploader.upload(imageFile.path, {
+    // Upload image to cloudinary
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
       resource_type: "image",
     });
-    const imageUrl = imageUplaod.secure_url;
+    const imageUrl = imageUpload.secure_url;
 
+    // Prepare data
     const doctorData = {
       name,
       email,
       password: hashedPassword,
-      specialization,
+      speciality,
       degree,
       experience,
       about,
       fees,
-      address: JSON.parse(address),
+      address,
       image: imageUrl,
       date: Date.now(),
     };
-    // saving doctor data to database
+
+    // Save doctor
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
 
