@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContest } from "../context/AppContest";
+import { AppContext } from "../context/AppContext";
+
 //import { doctors } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 
 const RelatedDoctors = ({ speciality, docId }) => {
-  const { doctors } = useContext(AppContest);
+  const { doctors } = useContext(AppContext);
   const [relDoc, setRelDoc] = useState([]);
   const navigate = useNavigate();
 

@@ -32,17 +32,25 @@ const AddDoctor = () => {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("experience", experience);
-      formData.append("fees", Number(fees));
+      formData.append("fees", String(fees));
+
       formData.append("speciality", speciality); // 🔄 Use correct backend field name
       formData.append("degree", degree);
       formData.append("about", about);
       formData.append("address[line1]", address1); // ✅ send as separate keys
       formData.append("address[line2]", address2);
 
+      console.log("backendUrl:", backendUrl);
+      console.log("aToken:", aToken);
+
       const { data } = await axios.post(
         backendUrl + "/api/admin/add-doctor",
         formData,
-        { headers: { aToken } }
+        {
+          headers: {
+            aToken,
+          },
+        }
       );
 
       if (data.success) {

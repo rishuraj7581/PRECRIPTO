@@ -223,10 +223,19 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
-const razorpayInstance = new razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// TEMPORARY Razorpay MOCK
+const instance = {
+  orders: {
+    create: async (options) => {
+      // Fake order data
+      return {
+        id: "fake_order_id_123",
+        currency: options.currency,
+        amount: options.amount,
+      };
+    },
+  },
+};
 
 //API to make payment of appointment using razorpay
 const paymentRazorpay = async (req, res) => {
